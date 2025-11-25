@@ -1,0 +1,109 @@
+.item-card {
+  border: 2px solid #333;
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.item-card-header {
+  padding: 0.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.item-status-badge {
+  display: inline-block;
+}
+
+.item-status-badge span {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border: 1px solid #333;
+  background: white;
+  color: #333;
+}
+
+.status-available {
+  background: white;
+  color: #333;
+}
+
+.status-checked-out {
+  background: #333;
+  color: white;
+}
+
+.item-card-body {
+  padding: 1rem;
+  flex: 1;
+}
+
+.item-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.item-author {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.item-detail-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail-label {
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #333;
+}
+
+.item-card-footer {
+  padding: 0.75rem;
+  border-top: 1px solid #333;
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: 2px solid #333;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: #333;
+  color: white;
+}
+
+.action-btn:disabled {
+  background: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .item-actions {
+    flex-direction: column;
+  }
+}
+
