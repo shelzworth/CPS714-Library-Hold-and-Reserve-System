@@ -2,7 +2,7 @@
 
 A Firebase-based holds and reservations management system that integrates with the Library Management System catalog (Project 2) and user dashboard (Project 4).
 
-## 🎯 Project Overview
+## Project Overview
 
 This sub-project manages:
 - **Holds** - Queue system for checked-out items
@@ -10,7 +10,7 @@ This sub-project manages:
 - **Data Synchronization** - Pulls catalog and user data from other sub-projects
 - **Validation** - Ensures business rules are followed
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 Project 2 (Catalog) → [Sync] → Our System ← [Sync] ← Project 4 (Users)
@@ -27,7 +27,7 @@ Project 2 (Catalog) → [Sync] → Our System ← [Sync] ← Project 4 (Users)
 4. **Store holds/reservations** in our Firebase
 5. **Expose data** for other projects to read
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js v14+
@@ -54,7 +54,7 @@ npm start
 
 4. Open http://localhost:3000
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -68,7 +68,7 @@ src/
 └── index.css                  # Global styles
 ```
 
-## 🔥 Firebase Collections
+## Firebase Collections
 
 Our system manages these collections:
 
@@ -104,7 +104,7 @@ Catalog items cached for availability checking
 ### `cached_loans` (synced from Project 4)
 Current user loans cached for validation
 
-## 🔌 Integration
+## Integration
 
 ### For Project 2 (Catalog System)
 We need your Firebase credentials to sync catalog data. See `INTEGRATION.md` for details.
@@ -115,7 +115,7 @@ Already integrated! We read your `users` and `loans` collections. You can read o
 ### For Project 8 (Notifications)
 Monitor our `holds` collection for status changes from `waiting` to `ready` to trigger notifications.
 
-## 🧪 Testing
+## Testing
 
 ### Using the Test Interface
 
@@ -130,20 +130,20 @@ Monitor our `holds` collection for status changes from `waiting` to `ready` to t
 - User ID: `user1`
 - Item ID: `BK-1001`
 - Click "Place Hold"
-- ✅ Should succeed if item is checked out
+- Should succeed if item is checked out
 
 **Place a Reservation:**
 - User ID: `user2`
 - Item ID: `BK-5003`
 - Click "Place Reservation"
-- ✅ Should succeed if item is available
+- Should succeed if item is available
 
 **View User Holds:**
 - User ID: `user1`
 - Click "Get User Holds"
-- ✅ Should show all holds for user1
+- Should show all holds for user1
 
-## 📊 API Functions
+## API Functions
 
 ### Core Operations
 
@@ -182,7 +182,7 @@ if (validation.valid) {
 }
 ```
 
-## 🛠️ Business Rules
+## Business Rules
 
 ### Hold Rules
 1. Item must be checked out (not available)
@@ -196,20 +196,20 @@ if (validation.valid) {
 3. Reservations expire after 7 days
 4. Only one reservation per item at a time
 
-## 📋 Data Validation
+## Data Validation
 
 All requests are validated against:
 - **Project 2 Catalog** - Item availability status
 - **Project 4 Loans** - User's current borrowed items
 - **Our Database** - Existing holds/reservations
 
-## 🔄 Sync Schedule
+## Sync Schedule
 
 - **User Profiles:** Cached for 1 hour
 - **Catalog Items:** Cached for 5 minutes
 - **User Loans:** Fetched on demand
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### "Project 2 not configured yet"
 - Need Firebase credentials from Project 2 team
@@ -223,24 +223,24 @@ All requests are validated against:
 - Verify Firebase rules allow read/write
 - Check that API keys are correct
 
-## 📚 Documentation
+## Documentation
 
 - `INTEGRATION.md` - Integration guide for other teams
 - Firebase Console: https://console.firebase.google.com/project/cps714sub3
 - Project 4 Mock Users: user1, user2, user3, user4
 
-## 👥 Team
+## Team
 
 Sub-Project 3 Team - Section [Your Section]
 
-## 📝 Notes
+## Notes
 
 - This is a **database manipulation layer** - complex UI lives in Project 4
 - We **read** from other projects, never write to them
 - All hold/reservation logic is self-contained
 - System designed for easy integration with other sub-projects
 
-## 🎓 Assignment Context
+## Assignment Context
 
 CPS714 - Software Project Management  
 Assignment #2: Executing, Monitoring, and Closing  
