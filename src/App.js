@@ -1,7 +1,7 @@
 // src/App.js
 // Simple testing interface for holds and reservations
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   placeHold,
   placeReservation,
@@ -10,7 +10,11 @@ import {
   cancelHold,
   cancelReservation,
   getAllHolds,
-  getAllReservations
+  getAllReservations,
+  startExpirationJob,
+  stopExpirationJob,
+  isExpirationJobRunning,
+  expireOldReservations
 } from './services/holdsService';
 import './App.css';
 
@@ -21,14 +25,28 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [holdId, setHoldId] = useState('');
   const [reservationId, setReservationId] = useState('');
+  const [expirationJobStatus, setExpirationJobStatus] = useState(false);
+
+  // Start automated expiration job on component mount
+  useEffect(() => {
+    // Start expiration job to run every 60 minutes
+    startExpirationJob(60);
+    setExpirationJobStatus(true);
+
+    // Cleanup on unmount
+    return () => {
+      stopExpirationJob();
+      setExpirationJobStatus(false);
+    };
+  }, []);
 
   const handleOperation = async (operation) => {
     setLoading(true);
     setResult(null);
-    
+
     try {
       let response;
-      
+
       switch(operation) {
         case 'placeHold':
           response = await placeHold(userId, itemId);
@@ -54,10 +72,24 @@ function App() {
         case 'getAllReservations':
           response = await getAllReservations();
           break;
+        case 'expireReservations':
+          response = await expireOldReservations();
+          break;
+        case 'toggleExpirationJob':
+          if (isExpirationJobRunning()) {
+            stopExpirationJob();
+            setExpirationJobStatus(false);
+            response = { success: true, message: 'Expiration job stopped' };
+          } else {
+            startExpirationJob(60);
+            setExpirationJobStatus(true);
+            response = { success: true, message: 'Expiration job started (runs every 60 minutes)' };
+          }
+          break;
         default:
           response = { error: 'Unknown operation' };
       }
-      
+
       setResult(response);
     } catch (error) {
       setResult({ error: error.message });
@@ -69,13 +101,13 @@ function App() {
   return (
     <div className="app">
       <header>
-        <h1>📚 Holds & Reservations System</h1>
+        <h1>Holds & Reservations System</h1>
         <p>Sub-Project 3: Database Manager</p>
       </header>
-      
+
       <div className="input-section">
         <h2>Input Parameters</h2>
-        
+
         <div className="input-group">
           <label>User ID (from Project 4):</label>
           <input
@@ -86,7 +118,7 @@ function App() {
           />
           <small>Use: user1, user2, user3, or user4 (from Project 4 mock data)</small>
         </div>
-        
+
         <div className="input-group">
           <label>Item ID (from Project 2 Catalog):</label>
           <input
@@ -108,7 +140,7 @@ function App() {
               placeholder="Hold document ID"
             />
           </div>
-          
+
           <div className="input-group">
             <label>Reservation ID (for cancel):</label>
             <input
@@ -123,7 +155,7 @@ function App() {
 
       <div className="operations">
         <h2>Operations</h2>
-        
+
         <div className="button-section">
           <h3>Create</h3>
           <div className="button-grid">
@@ -165,10 +197,25 @@ function App() {
             </button>
           </div>
         </div>
+
+        <div className="button-section">
+          <h3>Maintenance</h3>
+          <div className="button-grid">
+            <button onClick={() => handleOperation('expireReservations')} className="btn-secondary">
+              Expire Old Reservations (Manual)
+            </button>
+            <button onClick={() => handleOperation('toggleExpirationJob')} className="btn-secondary">
+              {expirationJobStatus ? 'Stop' : 'Start'} Auto-Expiration Job
+            </button>
+          </div>
+          <small style={{ display: 'block', marginTop: '8px', color: '#666' }}>
+            Auto-expiration job: {expirationJobStatus ? 'Running (every 60 min)' : 'Stopped'}
+          </small>
+        </div>
       </div>
 
       {loading && <div className="loading">⏳ Processing...</div>}
-      
+
       {result && (
         <div className={`result ${result.success === false ? 'error' : 'success'}`}>
           <h3>Result:</h3>
@@ -177,7 +224,7 @@ function App() {
       )}
 
       <footer>
-        <h3>📖 Quick Reference</h3>
+        <h3>Quick Reference</h3>
         <div className="reference">
           <div>
             <strong>Available Mock Users (Project 4):</strong>
